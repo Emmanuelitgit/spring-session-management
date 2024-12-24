@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.logout.CookieClearingLogo
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Slf4j
 @EnableWebSecurity
@@ -52,7 +53,7 @@ public class SecurityConfiguration {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> {
                     httpSecuritySessionManagementConfigurer
                             .maximumSessions(1)
-                            .maxSessionsPreventsLogin(false)
+                            .maxSessionsPreventsLogin(true)
                             .expiredUrl("/login");
                 })
                .logout(logout->{
@@ -65,4 +66,10 @@ public class SecurityConfiguration {
                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                .build();
     }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
 }
